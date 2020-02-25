@@ -10,7 +10,7 @@
       <el-card>
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">主页</el-breadcrumb-item>
-          <el-breadcrumb-item>{{activeName}}</el-breadcrumb-item>
+          <el-breadcrumb-item>影片详情</el-breadcrumb-item>
           <el-breadcrumb-item>{{mname}}</el-breadcrumb-item>
         </el-breadcrumb>
         <el-row :gutter="50">
@@ -74,8 +74,10 @@
         <el-row>
           <div class="src_list">
             <ul>
-              <li v-for="(item,i) in srcList" :key="item.src">
-                <el-button type="danger">{{i+1}}</el-button>
+              <li v-for="item in srcList" :key="item.src">
+               <router-link  :to="'/play/'+activeName+'/'+mname+'/'+item.steps">
+                <el-button type="danger">{{item.steps}}</el-button>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -115,7 +117,6 @@ export default {
       )
       this.list = res.data.list
       this.srcList = res.data.src
-      console.log(this.list)
     }
   }
 

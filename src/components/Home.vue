@@ -9,7 +9,7 @@
     <el-main>
       <el-carousel :interval="4000" type="card" height="260px">
         <el-carousel-item v-for="item in Carousellist" :key="item.src">
-          <img :src="item.src" />
+        <router-link :to="'/detail/'+item.activeName+'/'+item.mname">  <img :src="item.limg" /></router-link>
         </el-carousel-item>
       </el-carousel>
       <el-card>
