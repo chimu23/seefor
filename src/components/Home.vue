@@ -17,50 +17,65 @@
           <el-tab-pane label="热门推荐" name="hot">
             <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
+                <router-link :to="'/detail/'+activeName+'/'+item.mname">
+                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
                 <div class="photo">
                   <img :src="item.img" />
                 </div>
                 <div class="title">{{item.mname}}</div>
+                </router-link>
               </li>
             </ul>
           </el-tab-pane>
           <el-tab-pane label="电影" name="movie">
-              <ul class="photo_container">
+             <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
+                <router-link :to="'/detail/'+activeName+'/'+item.mname">
+                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
                 <div class="photo">
                   <img :src="item.img" />
                 </div>
                 <div class="title">{{item.mname}}</div>
+                </router-link>
               </li>
             </ul>
           </el-tab-pane>
           <el-tab-pane label="连续剧" name="series">
-              <ul class="photo_container">
+           <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
+                <router-link :to="'/detail/'+activeName+'/'+item.mname">
+                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
                 <div class="photo">
                   <img :src="item.img" />
                 </div>
                 <div class="title">{{item.mname}}</div>
+                </router-link>
               </li>
             </ul>
           </el-tab-pane>
           <el-tab-pane label="综艺" name="variety">
-              <ul class="photo_container">
+         <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
+                <router-link :to="'/detail/'+activeName+'/'+item.mname">
+                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
                 <div class="photo">
                   <img :src="item.img" />
                 </div>
                 <div class="title">{{item.mname}}</div>
+                </router-link>
               </li>
             </ul>
           </el-tab-pane>
           <el-tab-pane label="动漫" name="anime">
-              <ul class="photo_container">
+            <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
+                <router-link :to="'/detail/'+activeName+'/'+item.mname">
+                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
                 <div class="photo">
                   <img :src="item.img" />
                 </div>
                 <div class="title">{{item.mname}}</div>
+                </router-link>
               </li>
             </ul>
           </el-tab-pane>
