@@ -2,14 +2,21 @@
   <el-container>
     <el-header>
       <div class="header">
-        <img src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
-        <el-button size="mini" type="warning">登录 NOW</el-button>
+        <img @click="show" src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
+        <el-button v-show="isLogin" size="mini" type="warning" @click="dialogVisible=true">登录 NOW</el-button>
+
+        <div v-show="!isLogin" class="login_box">
+          <el-avatar size="large">{{loginName}}</el-avatar>
+          <el-button size="mini" type="warning" @click="logout">退出</el-button>
+        </div>
       </div>
     </el-header>
     <el-main>
       <el-carousel :interval="4000" type="card" height="260px">
         <el-carousel-item v-for="item in Carousellist" :key="item.src">
-        <router-link :to="'/detail/'+item.activeName+'/'+item.mname">  <img :src="item.limg" /></router-link>
+          <router-link :to="'/detail/'+item.activeName+'/'+item.mname">
+            <img :src="item.limg" />
+          </router-link>
         </el-carousel-item>
       </el-carousel>
       <el-card>
@@ -18,50 +25,50 @@
             <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
                 <router-link :to="'/detail/'+activeName+'/'+item.mname">
-                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
-                <div class="photo">
-                  <img :src="item.img" />
-                </div>
-                <div class="title">{{item.mname}}</div>
+                  <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
+                  <div class="photo">
+                    <img :src="item.img" />
+                  </div>
+                  <div class="title">{{item.mname}}</div>
                 </router-link>
               </li>
             </ul>
           </el-tab-pane>
           <el-tab-pane label="电影" name="movie">
-             <ul class="photo_container">
+            <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
                 <router-link :to="'/detail/'+activeName+'/'+item.mname">
-                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
-                <div class="photo">
-                  <img :src="item.img" />
-                </div>
-                <div class="title">{{item.mname}}</div>
+                  <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
+                  <div class="photo">
+                    <img :src="item.img" />
+                  </div>
+                  <div class="title">{{item.mname}}</div>
                 </router-link>
               </li>
             </ul>
           </el-tab-pane>
           <el-tab-pane label="连续剧" name="series">
-           <ul class="photo_container">
+            <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
                 <router-link :to="'/detail/'+activeName+'/'+item.mname">
-                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
-                <div class="photo">
-                  <img :src="item.img" />
-                </div>
-                <div class="title">{{item.mname}}</div>
+                  <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
+                  <div class="photo">
+                    <img :src="item.img" />
+                  </div>
+                  <div class="title">{{item.mname}}</div>
                 </router-link>
               </li>
             </ul>
           </el-tab-pane>
           <el-tab-pane label="综艺" name="variety">
-         <ul class="photo_container">
+            <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
                 <router-link :to="'/detail/'+activeName+'/'+item.mname">
-                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
-                <div class="photo">
-                  <img :src="item.img" />
-                </div>
-                <div class="title">{{item.mname}}</div>
+                  <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
+                  <div class="photo">
+                    <img :src="item.img" />
+                  </div>
+                  <div class="title">{{item.mname}}</div>
                 </router-link>
               </li>
             </ul>
@@ -70,11 +77,11 @@
             <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
                 <router-link :to="'/detail/'+activeName+'/'+item.mname">
-                 <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
-                <div class="photo">
-                  <img :src="item.img" />
-                </div>
-                <div class="title">{{item.mname}}</div>
+                  <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
+                  <div class="photo">
+                    <img :src="item.img" />
+                  </div>
+                  <div class="title">{{item.mname}}</div>
                 </router-link>
               </li>
             </ul>
@@ -96,6 +103,26 @@
         <div>Seefor 祝您观影愉快</div>
       </div>
     </el-footer>
+    <el-dialog
+      title="登录(不存在则直接注册)"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <el-form :model="loginForm" :rules="loginRules" ref="loginForm">
+        <el-form-item label="用户名 :" prop="name">
+          <el-input v-model="loginForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="密 码 :" prop="password">
+          <el-input type="password" v-model="loginForm.password"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="subLogin">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -104,6 +131,7 @@ export default {
   created () {
     this.getCarousel()
     this.handleClick()
+    this.show()
   },
   data () {
     return {
@@ -111,7 +139,24 @@ export default {
       activeName: 'hot',
       list: [],
       total: 0,
-      currentPage: 1
+      currentPage: 1,
+      dialogVisible: false,
+      loginName: '',
+      isLogin: true,
+      loginForm: {
+        name: '',
+        password: ''
+      },
+      loginRules: {
+        name: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' },
+          { max: 8, message: '长度不能超过8位', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { min: 6, max: 12, message: '密码长度不符合要求', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
@@ -131,13 +176,56 @@ export default {
       this.getList()
     },
     async getList () {
-      const { data: res } = await this.$http.get(`/all/${this.activeName}/${(this.currentPage - 1) * 12}`)
+      const { data: res } = await this.$http.get(
+        `/all/${this.activeName}/${(this.currentPage - 1) * 12}`
+      )
       if (res.meta.status !== 200) {
         return null
       }
-      this.$message.success('获取数据成功')
+      // this.$message.success('获取数据成功')
       this.list = res.data.list
       this.total = res.data.total
+    },
+    handleClose () {
+      this.dialogVisible = false
+      this.$refs.loginForm.resetFields()
+    },
+    subLogin () {
+      this.$refs.loginForm.validate(async v => {
+        if (!v) {
+          return
+        }
+        try {
+          const config = await this.$http.post('/login', this.loginForm)
+          window.sessionStorage.setItem('token', config.data.token)
+          window.sessionStorage.setItem('name', config.data.name)
+          this.$message.success('登录成功')
+          this.$refs.loginForm.resetFields()
+          this.loginName = config.data.name
+          this.dialogVisible = false
+          this.isLogin = false
+        } catch (e) {
+          if (e.status === 422) {
+            this.$refs.loginForm.resetFields()
+            return this.$message.error('密码错误了呢，请重新输入')
+          }
+          return this.$message.error('请重新登录下')
+        }
+      })
+    },
+    logout () {
+      window.sessionStorage.removeItem('token')
+      window.sessionStorage.removeItem('name')
+      this.isLogin = true
+    },
+    show () {
+      if (window.sessionStorage.getItem('token')) {
+        this.isLogin = false
+        this.loginName = window.sessionStorage.getItem('name')
+      } else {
+        this.isLogin = true
+        this.loginName = window.sessionStorage.getItem('name')
+      }
     }
   }
 }
@@ -153,7 +241,6 @@ export default {
 }
 
 .el-main {
-  //   position: relative;
   background-color: #e9eef3;
   color: #333;
 }
@@ -180,6 +267,16 @@ export default {
     position: absolute;
     right: 0;
     margin-top: 5px;
+  }
+  .login_box {
+    position: absolute;
+    right: 0;
+    margin-top: 5px;
+    .el-avatar {
+      position: absolute;
+      right: 70px;
+      margin-top: 3px;
+    }
   }
 }
 .el-carousel__item h3 {
@@ -232,15 +329,14 @@ ul {
         width: 100%;
         height: 100%;
       }
-
     }
-     .title {
-        font-size: 13px;
-        font-weight: 600;
-        color: #772514;
-        text-align: center;
-        padding-top: 5px;
-      }
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #772514;
+      text-align: center;
+      padding-top: 5px;
+    }
   }
 }
 </style>

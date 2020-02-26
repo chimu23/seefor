@@ -3,7 +3,10 @@
     <el-header>
       <div class="header">
         <img src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
-        <el-button size="mini" type="warning">登录 NOW</el-button>
+     <div v-show="isLogin" class="login_box">
+          <el-avatar size="large">{{loginName}}</el-avatar>
+          <el-button size="mini" type="warning" @click="logout">退出</el-button>
+        </div>
       </div>
     </el-header>
     <el-main>
@@ -100,13 +103,16 @@ export default {
     this.mname = this.$route.params.name
     this.activeName = this.$route.params.activeName
     this.getDetail()
+    this.show()
   },
   data () {
     return {
       mname: '',
       activeName: '',
       list: {}, // 渲染影片详细
-      srcList: []
+      srcList: [],
+      isLogin: false,
+      loginName: ''
 
     }
   },
@@ -117,6 +123,20 @@ export default {
       )
       this.list = res.data.list
       this.srcList = res.data.src
+    },
+    show () {
+      if (window.sessionStorage.getItem('token')) {
+        this.isLogin = true
+        this.loginName = window.sessionStorage.getItem('name')
+      } else {
+        this.isLogin = false
+        this.loginName = window.sessionStorage.getItem('name')
+      }
+    },
+    logout () {
+      window.sessionStorage.removeItem('token')
+      window.sessionStorage.removeItem('name')
+      this.isLogin = false
     }
   }
 
@@ -160,6 +180,16 @@ export default {
     position: absolute;
     right: 0;
     margin-top: 5px;
+  }
+   .login_box {
+    position: absolute;
+    right: 0;
+    margin-top: 5px;
+    .el-avatar {
+      position: absolute;
+      right: 70px;
+      margin-top: 3px;
+    }
   }
 }
 // 原始模板

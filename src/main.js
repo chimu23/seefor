@@ -16,6 +16,19 @@ Vue.use(hls)
 
 Vue.use(ElementUI)
 
+axios.interceptors.request.use(config => {
+  config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
+
+axios.interceptors.response.use((response) => {
+  return response
+}, (err) => { // 这里是返回状态码不为200时候的错误处理
+  err.message = '状态错误'
+  err.status = 422
+  return Promise.reject(err)
+})
+
 Vue.prototype.$http = axios
 
 axios.defaults.baseURL = 'http://127.0.0.1:8081/'

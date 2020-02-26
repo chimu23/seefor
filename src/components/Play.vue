@@ -3,7 +3,10 @@
     <el-header>
       <div class="header">
         <img src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
-        <el-button size="mini" type="warning">登录 NOW</el-button>
+        <div v-show="isLogin" class="login_box">
+          <el-avatar size="large">{{loginName}}</el-avatar>
+          <el-button size="mini" type="warning" @click="logout">退出</el-button>
+        </div>
       </div>
     </el-header>
     <el-main>
@@ -27,7 +30,7 @@
             <ul>
               <li v-for="item in srcList" :key="item.src">
 
-                <el-button type="danger" @click="switchHandle(item.src)">{{item.steps}}</el-button>
+                <el-button :type="steps==item.steps?'danger':'plain'" @click="switchHandle(item.src)">{{item.steps}}</el-button>
 
               </li>
             </ul>
@@ -43,6 +46,7 @@
         <div>Seefor 祝您观影愉快</div>
       </div>
     </el-footer>
+    <Login></Login>
   </el-container>
 </template>
 
@@ -57,6 +61,7 @@ export default {
     // console.log(this.$route.params)
     // console.log('时间点1')
     this.getDetail()
+    this.show()
   },
   mounted () {
     this.player = this.$refs.videoPlayer.player
@@ -68,6 +73,8 @@ export default {
     return {
       mname: '',
       activeName: '',
+      isLogin: false,
+      loginName: '',
       dp: null,
       srcList: [],
       steps: 1,
@@ -116,11 +123,23 @@ export default {
 
       const index = this.srcList.findIndex(v => v.steps === this.steps - 0) // 找到该集在数组的位置，再通过index找到src
       this.switchHandle(this.srcList[index].src)
-
-      //   this.switchHandle(this.srcList[this.steps - 1].src)
     },
     go () {
       this.$router.go(-1)
+    },
+    show () {
+      if (window.sessionStorage.getItem('token')) {
+        this.isLogin = true
+        this.loginName = window.sessionStorage.getItem('name')
+      } else {
+        this.isLogin = false
+        this.loginName = window.sessionStorage.getItem('name')
+      }
+    },
+    logout () {
+      window.sessionStorage.removeItem('token')
+      window.sessionStorage.removeItem('name')
+      this.isLogin = false
     }
   }
 }
@@ -163,6 +182,16 @@ export default {
     position: absolute;
     right: 0;
     margin-top: 5px;
+  }
+   .login_box {
+    position: absolute;
+    right: 0;
+    margin-top: 5px;
+    .el-avatar {
+      position: absolute;
+      right: 70px;
+      margin-top: 3px;
+    }
   }
 }
 .play_box{
