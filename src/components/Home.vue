@@ -4,6 +4,12 @@
       <div class="header">
         <img @click="show" src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
         <el-button v-show="isLogin" size="mini" type="warning" @click="dialogVisible=true">登录 NOW</el-button>
+<!-- 搜索输入框 -->
+      <div class="search_box">
+         <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select" :clearable="true">    <el-button slot="append" icon="el-icon-search" @click="searchInput"></el-button>
+
+  </el-input>
+      </div>
 
         <div v-show="!isLogin" class="login_box">
           <el-avatar size="large">{{loginName}}</el-avatar>
@@ -142,6 +148,7 @@ export default {
       currentPage: 1,
       dialogVisible: false,
       loginName: '',
+      searchValue: '',
       isLogin: true,
       loginForm: {
         name: '',
@@ -225,6 +232,26 @@ export default {
       } else {
         this.isLogin = true
         this.loginName = window.sessionStorage.getItem('name')
+      }
+    },
+    async searchInput () {
+      console.log(this.searchValue)
+      if (this.searchValue.trim().length > 0) {
+        const { data: res } = await this.$http.get(`/search/${this.searchValue}`)
+        // console.log(res.data[0].mname)
+        console.log(res)
+
+        if (res.msg === 1) { return this.$message.info('暂时没找到该内容呢') } else {
+          this.$router.push(`/detail/${res.data[0].activeName}/${res.data[0].mname}`)
+        }
+      } else {
+        return this.$message({
+          showClose: true,
+          type: 'error',
+          duration: 800,
+          center: true,
+          message: '请先输入内容'
+        })
       }
     }
   }
@@ -337,6 +364,19 @@ ul {
       text-align: center;
       padding-top: 5px;
     }
+  }
+}
+.search_box{
+  // display: flex;
+  // width: 300px;
+  .el-input{
+     width: 330px;
+     position: relative;
+  }
+  .el-button{
+    position: absolute;
+    top:-12%;
+    right: 27%;
   }
 }
 </style>
