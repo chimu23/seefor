@@ -6,14 +6,8 @@ html,body,#app{
  
 
 }
-/* .el-breadcrumb{
-    margin-bottom: 15px;
-}
-.el-table{
-    margin-top: 15px;
-    font-size: 12px !important;
-}
-.el-pagination{
+
+/* .el-pagination{
     margin-top: 15px;
 }
 .el-cascader-menu {

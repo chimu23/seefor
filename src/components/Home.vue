@@ -2,7 +2,7 @@
   <el-container>
     <el-header>
       <div class="header">
-        <img @click="show" src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
+        <img  src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
         <el-button v-show="isLogin" size="mini" type="warning" @click="dialogVisible=true">登录 NOW</el-button>
 <!-- 搜索输入框 -->
       <div class="search_box">
