@@ -82,9 +82,6 @@ export default {
       this.userlist = res.data
       this.total = res.total
     },
-    showEditDialog () {
-
-    },
     async userStatusChange (row) {
       var { id, status } = row
       if (status === false) { status = 1 } else { status = 0 }
