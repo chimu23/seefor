@@ -79,8 +79,14 @@ export default {
           v.status = true
         }
       })
-      this.userlist = res.data
-      this.total = res.total
+      console.log(res)
+      if (res.msg === 301) {
+        this.$message.error('无访问权限')
+        return this.$router.push('/')
+      } else {
+        this.userlist = res.data
+        this.total = res.total
+      }
     },
     async userStatusChange (row) {
       var { id, status } = row

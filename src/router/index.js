@@ -55,4 +55,24 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  // if (to.path === '/admin') {
+  //   console.log('admin路径')
+  //   return next()
+  // } else {
+  //   console.log('正常路径')
+  //   return next()
+  // }
+  // console.log(to.path)
+  if (to.path.startsWith('/admin')) {
+    const name = window.sessionStorage.getItem('name')
+    if (name === 'admin') {
+      return next()
+    } else {
+      return next('/')
+    }
+  }
+  return next()
+})
+
 export default router

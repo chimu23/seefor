@@ -2,10 +2,10 @@
   <el-container>
     <el-header>
       <div class="header">
-        <img src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
+         <router-link to="/"> <img  src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" /></router-link>
      <div v-show="isLogin" class="login_box">
           <el-avatar size="large">{{loginName}}</el-avatar>
-          <el-button size="mini" type="warning" @click="logout">退出</el-button>
+          <el-button size="mini" type="danger" @click="logout">退出</el-button>
         </div>
       </div>
     </el-header>
@@ -189,6 +189,7 @@ export default {
       position: absolute;
       right: 70px;
       margin-top: 3px;
+      color: #657feb;
     }
   }
 }

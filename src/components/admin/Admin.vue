@@ -4,7 +4,9 @@
       <div>
         <img src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
         <span>Seefor后台管理系统</span>
+
       </div>
+         <div class="btn_out"><el-button size="mini" type="danger" @click="logout">退出</el-button></div>
     </el-header>
     <el-container>
       <el-aside width="200px">
@@ -50,7 +52,13 @@ export default {
   data () {
     return {}
   },
-  methods: {}
+  methods: {
+    logout () {
+      window.sessionStorage.removeItem('token')
+      window.sessionStorage.removeItem('name')
+      this.$router.push('/')
+    }
+  }
 }
 </script>
 
@@ -74,12 +82,18 @@ export default {
   display: flex;
   justify-content: space-between;
   padding-left: 0%;
-  align-items: center;
+
   div {
     display: flex;
     align-items: center;
+    justify-content: center;
     span {
       margin-left: 15px;
+    }
+    .btn_out{
+      align-self: right;
+      height: 35px;
+
     }
   }
 }

@@ -2,18 +2,19 @@
   <el-container>
     <el-header>
       <div class="header">
-        <img  src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
-        <el-button v-show="isLogin" size="mini" type="warning" @click="dialogVisible=true">登录 NOW</el-button>
+
+        <router-link to="/"> <img  src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" /></router-link>
+        <el-button v-show="isLogin" size="mini" type="primary" plain @click="dialogVisible=true">登录 NOW</el-button>
 <!-- 搜索输入框 -->
       <div class="search_box">
          <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select" :clearable="true">    <el-button slot="append" icon="el-icon-search" @click="searchInput"></el-button>
 
-  </el-input>
+            </el-input>
       </div>
 
         <div v-show="!isLogin" class="login_box">
-          <el-avatar size="large">{{loginName}}</el-avatar>
-          <el-button size="mini" type="warning" @click="logout">退出</el-button>
+     <router-link to="/admin">     <el-avatar size="large">{{loginName}}</el-avatar></router-link>
+          <el-button size="mini" type="danger" @click="logout">退出</el-button>
         </div>
       </div>
     </el-header>
@@ -283,6 +284,8 @@ export default {
 }
 .header {
   position: relative;
+  display: flex;
+  justify-content: center;
   img {
     position: absolute;
     left: 0;
@@ -295,14 +298,19 @@ export default {
     right: 0;
     margin-top: 5px;
   }
+  .search_box{
+    align-self: center;
+  }
   .login_box {
-    position: absolute;
-    right: 0;
-    margin-top: 5px;
+    align-self: right;
+    // position: absolute;
+    // right: 0;
+    // margin-top: 5px;
     .el-avatar {
       position: absolute;
       right: 70px;
       margin-top: 3px;
+      color: #657feb;
     }
   }
 }
