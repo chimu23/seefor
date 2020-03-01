@@ -2,7 +2,7 @@
   <el-container class="home_container">
     <el-header>
       <div>
-        <img src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" />
+       <router-link to="/"> <img src="http://pic2.zhimg.com/v2-42eab18c98bc41d2f2597c349b6f20a5_b.gif" /></router-link>
         <span>Seefor后台管理系统</span>
 
       </div>
