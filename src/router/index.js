@@ -7,6 +7,7 @@ import Admin from '../components/admin/Admin.vue'
 import Users from '../components/admin/Users.vue'
 import Comments from '../components/admin/Comments.vue'
 import Movies from '../components/admin/Movies.vue'
+import adminHome from '../components/admin/Home.vue'
 
 Vue.use(VueRouter)
 
@@ -30,7 +31,13 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin,
+    redirect: '/admin/home',
     children: [
+      {
+        path: '/admin/home',
+        name: 'adminHome',
+        component: adminHome
+      },
       {
         path: '/admin/users',
         name: 'Users',

@@ -8,7 +8,7 @@
      <el-card class="box-card">
 <el-row :gutter="20">
         <el-col :span="7">
-          <el-input placeholder="根据影片搜索" v-model="queryInfo.query" clearable @clear="getCommentsList">
+          <el-input placeholder="根据影片名模糊搜索" v-model="queryInfo.query" clearable @clear="getCommentsList">
             <el-button slot="append" icon="el-icon-search" @click="getCommentsList"></el-button>
           </el-input>
         </el-col>
@@ -18,7 +18,11 @@
         <el-table-column prop="mname" label="影片名" width="180"></el-table-column>
         <el-table-column prop="userID" label="用户ID" width="180"></el-table-column>
         <el-table-column prop="comment" label="评论内容" width="180"></el-table-column>
-
+        <el-table-column prop="comment" label="时间" width="180">
+          <template slot-scope="scope">
+            {{scope.row.time | dateFormat }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="230px" align="center">
           <template slot-scope="scope">
 
@@ -75,6 +79,8 @@ export default {
       const { data: res } = await this.$http.get('/admin/comments', {
         params: this.queryInfo
       })
+      console.log(res)
+
       this.commentsList = res.data
       this.total = res.total
     }
