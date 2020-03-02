@@ -100,7 +100,7 @@
           <span class="comment_title">{{item.userID}}</span>
 
           </el-divider>
-          <div class="spacecomment"> <span>{{item.comment}}</span>  <span>2019.9.9</span></div></li>
+          <div class="spacecomment"> <span>{{item.comment}}</span>  <span>{{item.time | dateFormat}}</span></div></li>
 
    </ul>
   </el-collapse-item>
@@ -161,7 +161,8 @@ export default {
       addComment: {
         userID: '',
         query: '',
-        mname: ''
+        mname: '',
+        time: ''
       }
 
     }
@@ -192,6 +193,8 @@ export default {
       const { data: res } = await this.$http.get('/singlecomments', {
         params: this.mname
       })
+      console.log(res)
+
       if (res.msg !== 200) return this.$message.error('获取评论失败，请稍后重试')
       this.commentList = res.data
     },
@@ -204,6 +207,7 @@ export default {
       this.addComment.mname = this.mname
     },
     async pushComment () {
+      this.addComment.time = Date.now()
       const { data: res } = await this.$http.post('/addComment', this.addComment)
       if (res.msg !== 200) return this.$message.error('未知错误，请稍后重试')
       this.drawer = false
