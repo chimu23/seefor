@@ -174,8 +174,7 @@ export default {
       this.$refs.subInfoRef.resetFields()
       this.$message.success('添加成功')
       this.dialogVisible = false
-      this.$refs.subInfoRef.resetFields()
-      this.subInfo = {}
+      this.getMovies()
     }
 
   }

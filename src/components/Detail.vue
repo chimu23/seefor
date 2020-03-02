@@ -64,10 +64,15 @@
               </p>
             </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <div class="grid-content bg-purple-dark introduce_box">
               <p>电影介绍</p>
             <span> {{list.introduce}}</span>
+            </div>
+          </el-col>
+           <el-col :span="1">
+            <div >
+              <el-button  circle plain @click="drawer=true" icon="el-icon-edit"></el-button>
             </div>
           </el-col>
         </el-row>
@@ -85,6 +90,23 @@
             </ul>
           </div>
         </el-row>
+        <el-row class="comment_box">
+          <el-col :span="24">
+            <el-collapse @change="showComment">
+  <el-collapse-item title="评论区" name="1">
+   <ul >
+     <li v-for="item in commentList" :key="item.id">
+        <el-divider content-position="left" >
+          <span class="comment_title">{{item.userID}}</span>
+
+          </el-divider>
+          <div class="spacecomment"> <span>{{item.comment}}</span>  <span>2019.9.9</span></div></li>
+
+   </ul>
+  </el-collapse-item>
+ </el-collapse></el-col>
+        </el-row>
+
       </el-card>
     </el-main>
     <el-footer>
@@ -94,6 +116,27 @@
         <div>Seefor 祝您观影愉快</div>
       </div>
     </el-footer>
+    <el-drawer
+  title="添加评论"
+  :visible.sync="drawer"
+  :with-header="false"
+  @open='openDrawer'
+  :modal="false"
+  class="addcomment_box">
+<el-form ref="addCommentRef" label-position="top" :model="addComment" label-width="80px" class="addComment_box">
+     <el-divider content-position="left"></el-divider>
+  <el-form-item label="用户名称 :">
+    <el-input disabled v-model="addComment.userID"></el-input>
+  </el-form-item>
+ <el-form-item label="评论内容 :">
+    <el-input  v-model="addComment.query"></el-input>
+  </el-form-item>
+
+  <div style="text-align:center"><el-button type="primary" @click="pushComment" >发布评论</el-button></div>
+</el-form>
+
+</el-drawer>
+
   </el-container>
 </template>
 
@@ -112,7 +155,14 @@ export default {
       list: {}, // 渲染影片详细
       srcList: [],
       isLogin: false,
-      loginName: ''
+      loginName: '',
+      drawer: false,
+      commentList: [],
+      addComment: {
+        userID: '',
+        query: '',
+        mname: ''
+      }
 
     }
   },
@@ -137,6 +187,27 @@ export default {
       window.sessionStorage.removeItem('token')
       window.sessionStorage.removeItem('name')
       this.isLogin = false
+    },
+    async showComment () {
+      const { data: res } = await this.$http.get('/singlecomments', {
+        params: this.mname
+      })
+      if (res.msg !== 200) return this.$message.error('获取评论失败，请稍后重试')
+      this.commentList = res.data
+    },
+    openDrawer () {
+      if (!window.sessionStorage.getItem('name')) {
+        this.drawer = false
+        return this.$message.error('请先登录')
+      }
+      this.addComment.userID = window.sessionStorage.getItem('name')
+      this.addComment.mname = this.mname
+    },
+    async pushComment () {
+      const { data: res } = await this.$http.post('/addComment', this.addComment)
+      if (res.msg !== 200) return this.$message.error('未知错误，请稍后重试')
+      this.drawer = false
+      this.showComment()
     }
   }
 
@@ -264,4 +335,25 @@ export default {
         margin-left: 3px;
     }
 }
+.comment_box{
+  padding-left: 40px;
+
+  ul{
+    list-style-type: none;
+    li{
+      .comment_title{
+color: #c0c4cc
+      }
+
+    }
+  }
+}
+.spacecomment{
+  display: flex;
+  justify-content: space-between;
+   font-size: 16px !important;
+ font-weight: 600;
+ padding-left: 120px;
+}
+
 </style>

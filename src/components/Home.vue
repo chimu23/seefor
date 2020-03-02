@@ -32,7 +32,6 @@
             <ul class="photo_container">
               <li v-for="item in list" :key="item.src">
                 <router-link :to="'/detail/'+activeName+'/'+item.mname">
-                  <!-- <router-link :to="{name:'Detail',query:{name:'luban'}}"> -->
                   <div class="photo">
                     <img :src="item.img" />
                   </div>
@@ -341,7 +340,7 @@ export default {
 .el-tab-pane {
   display: flex;
   justify-content: center;
-  flex-flow: row wrap;
+  // flex-flow: row wrap;
 }
 
 ul {
