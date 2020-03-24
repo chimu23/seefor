@@ -74,6 +74,9 @@
             <div >
               <el-button  circle plain @click="drawer=true" icon="el-icon-edit"></el-button>
             </div>
+             <div >
+              <el-button  circle plain @click="subCollection" :icon="index?'el-icon-star-on':'el-icon-star-off'" class="collection"></el-button>
+            </div>
           </el-col>
         </el-row>
         <el-row>
@@ -147,6 +150,7 @@ export default {
     this.activeName = this.$route.params.activeName
     this.getDetail()
     this.show()
+    this.isCollection()
   },
   data () {
     return {
@@ -163,8 +167,8 @@ export default {
         query: '',
         mname: '',
         time: ''
-      }
-
+      },
+      index: false
     }
   },
   methods: {
@@ -193,7 +197,6 @@ export default {
       const { data: res } = await this.$http.get('/singlecomments', {
         params: this.mname
       })
-      console.log(res)
 
       if (res.msg !== 200) return this.$message.error('获取评论失败，请稍后重试')
       this.commentList = res.data
@@ -209,9 +212,44 @@ export default {
     async pushComment () {
       this.addComment.time = Date.now()
       const { data: res } = await this.$http.post('/addComment', this.addComment)
-      if (res.msg !== 200) return this.$message.error('未知错误，请稍后重试')
+
+      if (res.status !== 200) return this.$message.error(res.msg)
       this.drawer = false
+      this.addComment.query = ''
+      this.$message.success(res.msg)
       this.showComment()
+    }, // 判断是否收藏，改变icon的值
+    isCollection () {
+      const arry = JSON.parse(window.sessionStorage.getItem('mcoll'))
+      const theIndex = arry.findIndex(i => {
+        return i === this.mname
+      })
+      if (theIndex === -1) { this.index = false } else {
+        this.index = true
+      }
+    }, // 判断是否收藏，加入或者删除收藏
+    async subCollection () {
+      this.index = !this.index
+      const data = JSON.parse(window.sessionStorage.getItem('mcoll'))
+      const mmname = window.sessionStorage.getItem('name')
+      if (this.index) {
+        data.push(this.mname)
+        window.sessionStorage.setItem('mcoll', JSON.stringify(data))
+        this.$http.post('collectionss', {
+          mmname,
+          data
+        })
+      } else {
+        const ii = data.findIndex(i => {
+          return i === this.mname
+        })
+        data.splice(ii, 1)
+        window.sessionStorage.setItem('mcoll', JSON.stringify(data))
+        this.$http.post('collectionss', {
+          mmname,
+          data
+        })
+      }
     }
   }
 
@@ -359,5 +397,8 @@ color: #c0c4cc
  font-weight: 600;
  padding-left: 120px;
 }
-
+.collection{
+  margin-top: 20px;
+  color: red;
+}
 </style>

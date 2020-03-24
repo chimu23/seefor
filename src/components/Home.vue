@@ -7,13 +7,13 @@
         <el-button v-show="isLogin" size="mini" type="primary" plain @click="dialogVisible=true">登录 NOW</el-button>
 <!-- 搜索输入框 -->
       <div class="search_box">
-         <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select" :clearable="true">    <el-button slot="append" icon="el-icon-search" @click="searchInput"></el-button>
-
-            </el-input>
+         <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select" :clearable="true">
+             <el-button slot="append" icon="el-icon-search" @click="searchInput"></el-button>
+          </el-input>
       </div>
 
         <div v-show="!isLogin" class="login_box">
-     <router-link to="/admin">     <el-avatar size="large">{{loginName}}</el-avatar></router-link>
+     <router-link to="/user">     <el-avatar size="large">{{loginName}}</el-avatar></router-link>
           <el-button size="mini" type="danger" @click="logout">退出</el-button>
         </div>
       </div>
@@ -169,8 +169,6 @@ export default {
   methods: {
     async getCarousel () {
       const { data: res } = await this.$http.get('/carousel')
-      console.log(res)
-
       this.Carousellist = res.data[0]
     },
     handleClick () {
@@ -189,7 +187,6 @@ export default {
       if (res.meta.status !== 200) {
         return null
       }
-      // this.$message.success('获取数据成功')
       this.list = res.data.list
       this.total = res.data.total
     },
@@ -211,6 +208,8 @@ export default {
           this.loginName = config.data.name
           this.dialogVisible = false
           this.isLogin = false
+          // this.getCollections()
+          this.getColl()
         } catch (e) {
           if (e.status === 422) {
             this.$refs.loginForm.resetFields()
@@ -238,8 +237,6 @@ export default {
       console.log(this.searchValue)
       if (this.searchValue.trim().length > 0) {
         const { data: res } = await this.$http.get(`/search/${this.searchValue}`)
-        // console.log(res.data[0].mname)
-        console.log(res)
 
         if (res.msg === 1) { return this.$message.info('暂时没找到该内容呢') } else {
           this.$router.push(`/detail/${res.data[0].activeName}/${res.data[0].mname}`)
@@ -253,6 +250,17 @@ export default {
           message: '请先输入内容'
         })
       }
+    },
+    async getCollections () {
+      const name = window.sessionStorage.getItem('name')
+      const { data, status } = await this.$http.get(`/collections?name=${name}`)
+      if (status !== 200) return
+      window.sessionStorage.setItem('collection', JSON.stringify(data.data))
+    },
+    async getColl () {
+      const name = window.sessionStorage.getItem('name')
+      const { data: res } = await this.$http.get(`/collectionss?name=${name}`)
+      window.sessionStorage.setItem('mcoll', JSON.stringify(res.data))
     }
   }
 }

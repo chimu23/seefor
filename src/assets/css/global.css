@@ -6,7 +6,9 @@ html,body,#app{
  
 
 }
-
+a{
+    text-decoration: none;
+}
 /* .el-pagination{
     margin-top: 15px;
 }

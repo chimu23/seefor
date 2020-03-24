@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../components/Home.vue'
 import Detail from '../components/Detail.vue'
 import Play from '../components/Play.vue'
+import User from '../components/User.vue'
 import Admin from '../components/admin/Admin.vue'
 import Users from '../components/admin/Users.vue'
 import Comments from '../components/admin/Comments.vue'
@@ -26,6 +27,11 @@ const routes = [
     path: '/play/:activeName/:name/:steps',
     name: 'Play',
     component: Play
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: User
   },
   {
     path: '/admin',

@@ -65,9 +65,6 @@ export default {
   },
   mounted () {
     this.player = this.$refs.videoPlayer.player
-    // console.log('时间点')
-
-    // this.switchHandle(this.srcList[this.steps - 1].src)
   },
   data () {
     return {
