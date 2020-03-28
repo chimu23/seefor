@@ -89,11 +89,18 @@
     <el-input v-model="subInfo.introduce"></el-input>
   </el-form-item>
   <el-form-item label="归属分类 :">
-    <el-input v-model="subInfo.activeName"></el-input>
+    <el-select v-model="subInfo.activeName" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
   </el-form-item>
   </el-form>
   <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button @click="handleDialogClose">取 消</el-button>
     <el-button type="primary" @click="subItem">确 定</el-button>
   </span>
 </el-dialog>
@@ -128,8 +135,26 @@ export default {
         time: '',
         activeName: '',
         introduce: ''
-      }
-
+      },
+      options: [{
+        value: 'anime',
+        label: '动漫'
+      }, {
+        value: 'carousel',
+        label: '轮播热点'
+      }, {
+        value: 'hot',
+        label: '推荐'
+      }, {
+        value: 'movie',
+        label: '电影'
+      }, {
+        value: 'series',
+        label: '电视剧'
+      }, {
+        value: 'variety',
+        label: '综艺'
+      }]
     }
   },
   methods: {
@@ -168,12 +193,10 @@ export default {
       this.subInfo = {}
     },
     async subItem () {
-      console.log(this.subInfo)
       const { data: res } = await this.$http.post('/admin/movies', this.subInfo)
       if (res.msg !== 200) return this.$message.error('添加错误，请稍后重试')
-      this.$refs.subInfoRef.resetFields()
+      this.handleDialogClose()
       this.$message.success('添加成功')
-      this.dialogVisible = false
       this.getMovies()
     }
 

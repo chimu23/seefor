@@ -46,7 +46,7 @@
         <div>Seefor 祝您观影愉快</div>
       </div>
     </el-footer>
-    <Login></Login>
+
   </el-container>
 </template>
 
@@ -117,6 +117,7 @@ export default {
         `/detail/${this.activeName}/${this.mname}`
       )
       this.srcList = res.data.src
+      console.log(res.data.src)
 
       const index = this.srcList.findIndex(v => v.steps === this.steps - 0) // 找到该集在数组的位置，再通过index找到src
       this.switchHandle(this.srcList[index].src)

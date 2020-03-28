@@ -58,9 +58,7 @@
                     disabled
                     show-score
                     text-color="#ff9900"
-
                   ></el-rate>
-
               </p>
             </div>
           </el-col>
@@ -221,6 +219,7 @@ export default {
     }, // 判断是否收藏，改变icon的值
     isCollection () {
       const arry = JSON.parse(window.sessionStorage.getItem('mcoll'))
+      if (!arry) return
       const theIndex = arry.findIndex(i => {
         return i === this.mname
       })
