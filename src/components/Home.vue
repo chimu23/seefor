@@ -7,7 +7,7 @@
         <el-button v-show="isLogin" size="mini" type="primary" plain @click="dialogVisible=true">登录 NOW</el-button>
 <!-- 搜索输入框 -->
       <div class="search_box">
-         <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select" :clearable="true">
+         <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select" :clearable="true" @keyup.enter.native="searchInput()">
              <el-button slot="append" icon="el-icon-search" @click="searchInput"></el-button>
           </el-input>
       </div>
@@ -20,8 +20,8 @@
     </el-header>
     <el-main>
       <el-carousel :interval="4000" type="card" height="260px">
-        <el-carousel-item v-for="item in Carousellist" :key="item.src">
-          <router-link :to="'/detail/'+item.activeName+'/'+item.mname">
+        <el-carousel-item v-for="item in Carousellist" :key="item.mname">
+          <router-link :to="'/detail/carousel/'+item.mname">
             <img :src="item.limg" />
           </router-link>
         </el-carousel-item>
@@ -173,7 +173,6 @@ export default {
     },
     handleClick () {
       this.currentPage = 1
-
       this.getList()
     },
     handleCurrentChange (e) {
@@ -208,8 +207,7 @@ export default {
           this.loginName = config.data.name
           this.dialogVisible = false
           this.isLogin = false
-          // this.getCollections()
-          this.getColl()
+          this.getCollList()
         } catch (e) {
           if (e.status === 422) {
             this.$refs.loginForm.resetFields()
@@ -222,6 +220,7 @@ export default {
     logout () {
       window.sessionStorage.removeItem('token')
       window.sessionStorage.removeItem('name')
+      window.sessionStorage.removeItem('collection')
       this.isLogin = true
     },
     show () {
@@ -234,13 +233,8 @@ export default {
       }
     },
     async searchInput () {
-      console.log(this.searchValue)
       if (this.searchValue.trim().length > 0) {
-        const { data: res } = await this.$http.get(`/search/${this.searchValue}`)
-
-        if (res.msg === 1) { return this.$message.info('暂时没找到该内容呢') } else {
-          this.$router.push(`/detail/${res.data[0].activeName}/${res.data[0].mname}`)
-        }
+        this.$router.push(`/search/${this.searchValue}`)
       } else {
         return this.$message({
           showClose: true,
@@ -251,16 +245,11 @@ export default {
         })
       }
     },
-    async getCollections () {
+    async getCollList () {
       const name = window.sessionStorage.getItem('name')
       const { data, status } = await this.$http.get(`/collections?name=${name}`)
       if (status !== 200) return
       window.sessionStorage.setItem('collection', JSON.stringify(data.data))
-    },
-    async getColl () {
-      const name = window.sessionStorage.getItem('name')
-      const { data: res } = await this.$http.get(`/collectionss?name=${name}`)
-      window.sessionStorage.setItem('mcoll', JSON.stringify(res.data))
     }
   }
 }

@@ -38,7 +38,7 @@
               </p>
               <p>
                 类型 :
-                <span>{{list.type}}</span>
+                <span>{{list.steps}}</span>
               </p>
               <p>
                 地区 :
@@ -83,9 +83,9 @@
         <el-row>
           <div class="src_list">
             <ul>
-              <li v-for="item in srcList" :key="item.src">
-               <router-link  :to="'/play/'+activeName+'/'+mname+'/'+item.steps">
-                <el-button type="danger">{{item.steps}}</el-button>
+              <li v-for="(item,i) in srcList" :key="item.src">
+               <router-link  :to="'/play/'+activeName+'/'+mname+'/'+i">
+                <el-button type="danger">{{item.step}}</el-button>
                 </router-link>
               </li>
             </ul>
@@ -174,8 +174,14 @@ export default {
       const { data: res } = await this.$http.get(
         `/detail/${this.activeName}/${this.mname}`
       )
-      this.list = res.data.list
-      this.srcList = res.data.src
+      this.list = res.data.list // 影视详情
+      const arry = res.data.src[0].src.split(' ')
+      arry.forEach(element => {
+        var a = {}
+        a.step = element.split('$')[0]
+        a.src = element.split('$')[1]
+        this.srcList.push(a)
+      })
     },
     show () {
       if (window.sessionStorage.getItem('token')) {
@@ -189,6 +195,7 @@ export default {
     logout () {
       window.sessionStorage.removeItem('token')
       window.sessionStorage.removeItem('name')
+      window.sessionStorage.removeItem('collection')
       this.isLogin = false
     },
     async showComment () {
@@ -218,7 +225,7 @@ export default {
       this.showComment()
     }, // 判断是否收藏，改变icon的值
     isCollection () {
-      const arry = JSON.parse(window.sessionStorage.getItem('mcoll'))
+      const arry = JSON.parse(window.sessionStorage.getItem('collection'))
       if (!arry) return
       const theIndex = arry.findIndex(i => {
         return i === this.mname
@@ -229,25 +236,35 @@ export default {
     }, // 判断是否收藏，加入或者删除收藏
     async subCollection () {
       this.index = !this.index
-      const data = JSON.parse(window.sessionStorage.getItem('mcoll'))
-      const mmname = window.sessionStorage.getItem('name')
+      const data = JSON.parse(window.sessionStorage.getItem('collection'))
+      const name = window.sessionStorage.getItem('name')
       if (this.index) {
         data.push(this.mname)
-        window.sessionStorage.setItem('mcoll', JSON.stringify(data))
-        this.$http.post('collectionss', {
-          mmname,
+        const r = await this.$http.post('collUpdate', {
+          name,
           data
         })
+        if (r.data.status === 200) {
+          window.sessionStorage.setItem('collection', JSON.stringify(data))
+          return this.$message.success(r.data.msg)
+        } else {
+          return this.$message.error(r.data.msg)
+        }
       } else {
         const ii = data.findIndex(i => {
           return i === this.mname
         })
         data.splice(ii, 1)
-        window.sessionStorage.setItem('mcoll', JSON.stringify(data))
-        this.$http.post('collectionss', {
-          mmname,
+        const r = await this.$http.post('collUpdate', {
+          name,
           data
         })
+        if (r.data.status === 200) {
+          window.sessionStorage.setItem('collection', JSON.stringify(data))
+          return this.$message.warning('已移除收藏')
+        } else {
+          return this.$message.error(r.data.msg)
+        }
       }
     }
   }
@@ -364,8 +381,9 @@ export default {
     li {
       flex: 0 0 8%;
       margin: 8px 10px;
+
       .el-button {
-        width: 70px;
+        width: 90px;
       }
     }
   }

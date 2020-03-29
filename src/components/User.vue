@@ -44,7 +44,7 @@ export default {
 
   created () {
     this.show()
-    this.getCollections()
+    this.getCollDetail()
   },
   mounted () {
 
@@ -76,15 +76,12 @@ export default {
       window.sessionStorage.removeItem('name')
       this.isLogin = false
     },
-    async getCollections () {
-      console.log('user')
-
+    async getCollDetail () {
       const name = window.sessionStorage.getItem('name')
-      const { data, status } = await this.$http.get(`/collections?name=${name}`)
-      if (status !== 200) return
-      window.sessionStorage.setItem('collection', JSON.stringify(data.data))
+      const { data } = await this.$http.get(`/collDetail?name=${name}`)
+      if (data.status !== 200) return this.$message.error(data.msg)
+      this.$message.success(data.msg)
       this.collectionList = data.data
-      console.log('userover')
     }
   }
 }

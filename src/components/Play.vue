@@ -28,9 +28,9 @@
          <el-row>
           <div class="src_list">
             <ul>
-              <li v-for="item in srcList" :key="item.src">
+              <li v-for="(item,i) in srcList" :key="item.src">
 
-                <el-button :type="steps==item.steps?'danger':'plain'" @click="switchHandle(item.src)">{{item.steps}}</el-button>
+                <el-button :type="steps==i?'danger':'plain'" @click="switchHandle(item.src)">{{item.step}}</el-button>
 
               </li>
             </ul>
@@ -116,11 +116,14 @@ export default {
       const { data: res } = await this.$http.get(
         `/detail/${this.activeName}/${this.mname}`
       )
-      this.srcList = res.data.src
-      console.log(res.data.src)
-
-      const index = this.srcList.findIndex(v => v.steps === this.steps - 0) // 找到该集在数组的位置，再通过index找到src
-      this.switchHandle(this.srcList[index].src)
+      const arry = res.data.src[0].src.split(' ')
+      arry.forEach(element => {
+        var a = {}
+        a.step = element.split('$')[0]
+        a.src = element.split('$')[1]
+        this.srcList.push(a)
+      })
+      this.switchHandle(this.srcList[this.steps].src)
     },
     go () {
       this.$router.go(-1)
@@ -219,7 +222,7 @@ export default {
       flex: 0 0 8%;
       margin: 8px 10px;
       .el-button {
-        width: 70px;
+        width: 90px;
       }
     }
   }

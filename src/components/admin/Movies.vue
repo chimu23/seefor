@@ -34,7 +34,8 @@
         <el-table-column prop="star" label="评分" ></el-table-column>
         <el-table-column label="操作" width="230px" align="center">
           <template slot-scope="scope">
-
+             <el-button type="primary" icon="el-icon-edit" size="mini"
+               @click="editByID(scope.row)"></el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini"
                @click="removeByMname(scope.row)"></el-button>
 
@@ -50,7 +51,7 @@
       ></el-pagination>
     </el-card>
     <el-dialog
-  title="新增影片"
+  title="影片信息"
   :visible.sync="dialogVisible"
   width="50%"
   :before-close="handleDialogClose">
@@ -58,26 +59,20 @@
   <el-form-item label="影片名 :">
     <el-input v-model="subInfo.mname"></el-input>
   </el-form-item>
-    <el-form-item label="评分 :">
-    <el-input v-model="subInfo.star" type="number"></el-input>
-  </el-form-item>
     <el-form-item label="导演 :">
     <el-input v-model="subInfo.director"></el-input>
   </el-form-item>
     <el-form-item label="演员 :">
     <el-input v-model="subInfo.actor"></el-input>
   </el-form-item>
-    <el-form-item label="图片地址 :">
-    <el-input v-model="subInfo.img"></el-input>
+      <el-form-item label="评分 :">
+    <el-input v-model="subInfo.star" type="number"></el-input>
   </el-form-item>
-    <el-form-item label="影视链接 :">
-    <el-input v-model="subInfo.src"></el-input>
-  </el-form-item>
-    <el-form-item label="影视集数 :">
-    <el-input v-model="subInfo.steps"></el-input>
-  </el-form-item>
-    <el-form-item label="地区 :">
+   <el-form-item label="地区 :">
     <el-input v-model="subInfo.region"></el-input>
+  </el-form-item>
+      <el-form-item label="影视类型 :">
+    <el-input v-model="subInfo.steps"></el-input>
   </el-form-item>
     <el-form-item label="语言 :">
     <el-input v-model="subInfo.language"></el-input>
@@ -85,8 +80,14 @@
     <el-form-item label="上映时间 :">
     <el-input v-model="subInfo.time"></el-input>
   </el-form-item>
-  <el-form-item label="介绍 :">
+   <el-form-item label="介绍 :">
     <el-input v-model="subInfo.introduce"></el-input>
+  </el-form-item>
+    <el-form-item label="图片地址 :">
+    <el-input v-model="subInfo.img"></el-input>
+  </el-form-item>
+    <el-form-item label="影视链接 :">
+    <el-input v-model="subInfo.src"></el-input>
   </el-form-item>
   <el-form-item label="归属分类 :">
     <el-select v-model="subInfo.activeName" placeholder="请选择">
@@ -127,30 +128,30 @@ export default {
         star: 0,
         img: '',
         src: '',
-        steps: 1,
+        steps: '',
         director: '',
         actor: '',
         region: '',
         language: '',
-        time: '',
+        time: '2020',
         activeName: '',
         introduce: ''
       },
       options: [{
-        value: 'anime',
-        label: '动漫'
+        value: 'hot',
+        label: '推荐'
       }, {
         value: 'carousel',
         label: '轮播热点'
-      }, {
-        value: 'hot',
-        label: '推荐'
       }, {
         value: 'movie',
         label: '电影'
       }, {
         value: 'series',
         label: '电视剧'
+      }, {
+        value: 'anime',
+        label: '动漫'
       }, {
         value: 'variety',
         label: '综艺'
@@ -173,16 +174,16 @@ export default {
       this.total = res.total
     },
     async removeByMname (row) {
-      const { mname, activeName } = row
+      const { Id } = row
       const { data: res } = await this.$http.delete('/admin/movies', {
-        params: { mname, activeName }
+        params: { Id }
       })
 
       if (res.msg !== 200) {
         return this.$message.error('删除失败，请稍后重试')
       }
-      const index = this.movieList.findIndex(item => { return item.mname === mname })
-      this.movieList.splice(1, index)
+      const index = this.movieList.findIndex(item => { return item.Id === Number(Id) })
+      this.movieList.splice(index, 1)
       this.total -= 1
       if (this.total === 0) { this.movieList = [] }
       return this.$message.success('已删除')
@@ -194,10 +195,18 @@ export default {
     },
     async subItem () {
       const { data: res } = await this.$http.post('/admin/movies', this.subInfo)
-      if (res.msg !== 200) return this.$message.error('添加错误，请稍后重试')
+      if (res.msg !== 200) return this.$message.error('发生了错误，请稍后重试')
       this.handleDialogClose()
-      this.$message.success('添加成功')
+      this.$message.success('数据库已更新')
       this.getMovies()
+    },
+    async editByID (row) {
+      const { data: res } = await this.$http.get('/admin/movies', {
+        params: { query: row.mname }
+      })
+      console.log(res)
+      this.dialogVisible = true
+      this.subInfo = res.data[0]
     }
 
   }
