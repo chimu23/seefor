@@ -9,6 +9,7 @@ import Admin from '../components/admin/Admin.vue'
 import Users from '../components/admin/Users.vue'
 import Comments from '../components/admin/Comments.vue'
 import Movies from '../components/admin/Movies.vue'
+import Carousel from '../components/admin/Carousel.vue'
 import adminHome from '../components/admin/Home.vue'
 
 Vue.use(VueRouter)
@@ -64,6 +65,11 @@ const routes = [
         path: '/admin/movies',
         name: 'Movies',
         component: Movies
+      },
+      {
+        path: '/admin/carousel',
+        name: 'Carousel',
+        component: Carousel
       }
     ]
   }

@@ -18,7 +18,7 @@
                 </div>
               </router-link>
               <div class="box_troduce">
-                <p>名称：{{i.mname}}</p>
+                <p>名称：<span>{{i.mname}}</span></p>
                 <p>导演：{{i.director}}</p>
                 <p>演员：{{i.actor}}</p>
                 <p>类型：{{i.steps}}</p>
@@ -131,7 +131,13 @@ export default {
         margin-left: 3rem;
         margin-top: .5rem;
         p{
-          margin: .3rem;
+          margin: .5rem;
+        }
+        p:nth-child(1){
+          span{
+color: #337ab7;
+          }
+
         }
       }
       .box_img {

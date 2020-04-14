@@ -37,6 +37,10 @@
             <i class="el-icon-video-play"></i>
             <span slot="title">影片管理</span>
           </el-menu-item>
+             <el-menu-item index="/admin/carousel">
+            <i class="el-icon-video-play"></i>
+            <span slot="title">轮播管理</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
@@ -105,6 +109,7 @@ export default {
 }
 .el-main {
   background-color: #e4e9ec;
+  position: relative;
 }
 .el-menu {
   border-right: none;

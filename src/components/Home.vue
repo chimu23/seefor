@@ -133,6 +133,7 @@
 </template>
 
 <script>
+const CryptoJS = require('crypto-js')
 export default {
   created () {
     this.getCarousel()
@@ -199,6 +200,15 @@ export default {
           return
         }
         try {
+          // console.log(bcrypt.hashSync(this.loginForm.password, 10))
+          const encrypted = CryptoJS.AES.encrypt(this.loginForm.password, '123456', {
+            mode: CryptoJS.mode.ECB,
+            padding: CryptoJS.pad.Pkcs7
+          })
+          this.loginForm.password = encrypted.toString() // 将用户密码加密传输
+          // var decrypt = CryptoJS.AES.decrypt(encrypted.toString(), '123456', { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 })
+          // console.log(CryptoJS.enc.Utf8.stringify(decrypt).toString())
+
           const config = await this.$http.post('/login', this.loginForm)
           window.sessionStorage.setItem('token', config.data.token)
           window.sessionStorage.setItem('name', config.data.name)
