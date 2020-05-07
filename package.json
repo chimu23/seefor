@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "bcryptjs": "^2.4.3",
     "core-js": "^3.6.4",
     "crypto-js": "^4.0.0",
     "echarts": "^4.7.0",
